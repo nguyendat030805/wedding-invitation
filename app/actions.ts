@@ -15,7 +15,7 @@ export async function submitWish(formData: FormData) {
 
   try {
     // Câu lệnh SQL thuần để thêm lời chúc vào bảng Wish
-    const sql = 'INSERT INTO Wish (name, relationship, content) VALUES (?, ?, ?)';
+    const sql = 'INSERT INTO wish (name, relationship, content) VALUES (?, ?, ?)';
     await pool.execute(sql, [name, relationship, content]);
     
     // Ép Next.js xóa cache trang chủ để cập nhật lời chúc mới ngay lập tức
@@ -31,7 +31,7 @@ export async function submitWish(formData: FormData) {
 export async function getWishes() {
   try {
     // Câu lệnh SQL lấy toàn bộ lời chúc, xếp người mới chúc lên đầu
-    const [rows] = await pool.execute('SELECT * FROM Wish ORDER BY createdAt DESC');
+    const [rows] = await pool.execute('SELECT * FROM wish ORDER BY createdAt DESC');
     return rows as any[];
   } catch (error) {
     console.error('Lỗi Fetch dữ liệu:', error);

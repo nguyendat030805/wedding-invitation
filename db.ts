@@ -1,14 +1,16 @@
 import mysql from 'mysql2/promise';
 
 export const pool = mysql.createPool({
-  host: process.env.MYSQL_HOST || '127.0.0.1',
-  user: process.env.MYSQL_USER || 'root',
-  password: process.env.MYSQL_PASSWORD || 'Nguyendat@123', 
-  database: process.env.MYSQL_DATABASE || 'wedding_db',
-  port: Number(process.env.MYSQL_PORT) || 3306,
+  host: process.env.MYSQL_HOST || 'mysql-3048986d-datnguyen-wedding.h.aivencloud.com',
+  user: process.env.MYSQL_USER || 'avnadmin',
+  password: process.env.MYSQL_PASSWORD || 'AVNS__-MNpS_JJxBoWT5Lzuz', 
+  database: process.env.MYSQL_DATABASE || 'defaultdb',
+  port: Number(process.env.MYSQL_PORT) || 23545,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
   // Thêm dòng này vì hầu hết các host MySQL online đều yêu cầu SSL mã hóa bảo mật
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: true } : undefined
+  ssl: {
+    rejectUnauthorized: false // Giúp Vercel kết nối mượt mà không bị bắt bẻ chứng chỉ cục bộ
+  }
 });
