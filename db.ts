@@ -1,16 +1,20 @@
 import mysql from 'mysql2/promise';
 
 export const pool = mysql.createPool({
-  host: process.env.MYSQL_HOST || 'mysql-3048986d-datnguyen-wedding.h.aivencloud.com',
-  user: process.env.MYSQL_USER || 'avnadmin',
+  host: process.env.MYSQL_HOST,
+  user: process.env.MYSQL_USER,
   password: process.env.MYSQL_PASSWORD,
-  database: process.env.MYSQL_DATABASE || 'defaultdb',
-  port: Number(process.env.MYSQL_PORT) || 23545,
+  database: process.env.MYSQL_DATABASE,
+  port: Number(process.env.MYSQL_PORT),
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
-  // Thêm dòng này vì hầu hết các host MySQL online đều yêu cầu SSL mã hóa bảo mật
+  
+  // Cấu hình chí mạng để giải quyết ETIMEDOUT trên Aiven:
   ssl: {
-    rejectUnauthorized: false // Giúp Vercel kết nối mượt mà không bị bắt bẻ chứng chỉ cục bộ
-  }
+    rejectUnauthorized: false // Bỏ qua việc xác thực chứng chỉ cục bộ, giúp kết nối thông suốt lập tức
+  },
+  
+  // Thêm thời gian chờ kết nối dài hơn để tránh bị ngắt quá sớm
+  connectTimeout: 20000 
 });

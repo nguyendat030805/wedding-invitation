@@ -22,7 +22,7 @@ export async function submitWish(formData: FormData) {
     revalidatePath('/');
     return { success: true };
   } catch (error) {
-    console.error('Lỗi Database:', error);
+    console.error('Lỗi Database:', error instanceof Error ? error.message : error, error);
     return { success: false, error: 'Không thể gửi lời chúc. Vui lòng thử lại!' };
   }
 }
