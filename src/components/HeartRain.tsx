@@ -25,11 +25,11 @@ export default function HeartRain() {
   }, []);
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-30 overflow-hidden">
+    <div className="fixed inset-0 pointer-events-none z-1 overflow-hidden">
       {hearts.map((heart) => (
         <span
           key={heart.id}
-          className="absolute text-red-500/25 animate-fall"
+          className="absolute text-red-500 animate-fall"
           style={{
             left: `${heart.left}%`,
             animationDelay: `${heart.delay}s`,
