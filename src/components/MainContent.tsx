@@ -6,7 +6,7 @@ import Countdown from 'react-countdown';
 import Image from 'next/image';
 import Envelope from './Envelope';
 import HeartRain from './HeartRain';
-import { submitWish } from '@/app/actions';
+import { submitWish, likeWish, replyWish } from '@/app/actions';
 
 // Import thư viện Lightbox phóng to ảnh cưới
 import Lightbox from "yet-another-react-lightbox";
@@ -18,6 +18,8 @@ interface Wish {
   relationship: string;
   content: string;
   createdAt: Date;
+  likes?: number;
+  comment?: string;
 }
 
 interface Star {
@@ -38,6 +40,13 @@ export default function MainContent({ initialWishes }: { initialWishes: Wish[] }
   const [lightboxIndex, setLightboxIndex] = useState<number>(-1);
   const [stars, setStars] = useState<Star[]>([]);
   
+  // States cho tính năng Phản hồi và Modal Quà cưới
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [replyingId, setReplyingId] = useState<number | null>(null);
+  const [replyText, setReplyText] = useState("");
+  const [openGiftModal, setOpenGiftModal] = useState(false);
+  const [giftTab, setGiftTab] = useState<"groom" | "bride">("groom");
+
   const formRef = useRef<HTMLFormElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -76,8 +85,6 @@ export default function MainContent({ initialWishes }: { initialWishes: Wish[] }
   ];
 
   const lightboxSlides = imagesGrid.map(img => ({ src: img.src }));
-  const [openGiftModal, setOpenGiftModal] = useState(false);
-  const [giftTab, setGiftTab] = useState<"groom" | "bride">("groom");
 
   const bankInfo = {
     groom: { name: "Hồ Văn Trung", bank: "SHB Bank", number: "0352893879", qr: "/qr_chure.jpg" },
@@ -164,7 +171,7 @@ export default function MainContent({ initialWishes }: { initialWishes: Wish[] }
         const relationship = formData.get('relationship') as string;
         const content = formData.get('content') as string;
         
-        const mockNewWish = { id: Date.now(), name, relationship, content, createdAt: new Date() };
+        const mockNewWish = { id: Date.now(), name, relationship, content, createdAt: new Date(), likes: 0, comment: "" };
         setWishes((prev) => [mockNewWish, ...prev]);
       } else {
         setStatusMessage(res.error || 'Có lỗi xảy ra, vui lòng thử lại.');
@@ -172,6 +179,20 @@ export default function MainContent({ initialWishes }: { initialWishes: Wish[] }
     } catch (error) {
       console.error('Lỗi khi gửi lời chúc:', error);
       setStatusMessage('Không thể kết nối đến máy chủ. Vui lòng thử lại!');
+    }
+  };
+
+  // Hàm xử lý tăng lượt thả tim trực tiếp xuống DB MySQL
+  const handleLikeWish = async (id: number) => {
+    setWishes(prev => prev.map(w => w.id === id ? { ...w, likes: (w.likes || 0) + 1 } : w));
+    try {
+      const res = await likeWish(id);
+      if (!res.success) {
+        setWishes(prev => prev.map(w => w.id === id ? { ...w, likes: Math.max(0, (w.likes || 1) - 1) } : w));
+      }
+    } catch (error) {
+      console.error(error);
+      setWishes(prev => prev.map(w => w.id === id ? { ...w, likes: Math.max(0, (w.likes || 1) - 1) } : w));
     }
   };
 
@@ -309,7 +330,7 @@ export default function MainContent({ initialWishes }: { initialWishes: Wish[] }
                 </div>
               </motion.div>
 
-              <motion.p variants={fadeInUp} className="text-[14px] font-semibold tracking-widest text-gray-900 mb-4 uppercase font-mono" style={{ fontFamily: 'var(--font-serif-title), serif' }}>Trân Trọng Báo Tin Lễ Tân Hôn Của</motion.p>
+              <motion.p variants={fadeInUp} className="text-[14px] font-semibold tracking-widest text-gray-900 mb-4 uppercase font-mono" style={{ fontFamily: 'var(--font-serif-title), serif' }}>Trân Trọng Báo Tin Lễ Thành Hôn Của</motion.p>
               
               {/* Tên nhân vật chính */}
               <motion.div variants={fadeInScale} className="flex flex-col items-center justify-center space-y-2 mb-8 w-full overflow-hidden select-none">
@@ -336,7 +357,7 @@ export default function MainContent({ initialWishes }: { initialWishes: Wish[] }
                     <span className="text-2xl font-['UTM_Bikham'] font-bold text-gray-700 tracking-wide">2026</span>
                   </div>
                 </div>
-                <p className="text-xl text-amber-900/60 font-semibold italic mt-2 tracking-wide font-['UTM_Bikham']">(Tức Ngày 08 Tháng 06 Năm Bình Ngọ)</p>
+                <p className="text-xl text-amber-900/60 font-semibold italic mt-2 tracking-wide font-['UTM_Bikham']">(Tức Ngày 08 Tháng 06 Năm Bính Ngọ)</p>
               </motion.div>
 
               {/* Khung ảnh cưới chính */}
@@ -468,16 +489,16 @@ export default function MainContent({ initialWishes }: { initialWishes: Wish[] }
                     
                     <div className="flex items-center justify-center w-full max-w-[340px] mx-auto">
                       <div className="flex-1 text-center pr-2">
-                        <span className="text-sm font-semibold text-gray-900 font-sans tracking-tight">11 giờ 00</span>
+                        <span className="text-xl font-semibold text-gray-900  tracking-tight">11:00</span>
                       </div>
                       <div className="w-[1px] h-12 bg-gray-400/80" />
                       <div className="flex-1 flex flex-col items-center justify-center px-4 min-w-[100px]">
-                        <span className="text-[18px] font-medium text-gray-900 font-sans tracking-wide mb-1">{activeTab === 'groom' ? 'Thứ 5' : 'Thứ 3'}</span>
-                        <span className="text-[44px] font-serif font-normal text-gray-955 leading-none tracking-tight">{activeTab === 'groom' ? '23' : '21'}</span>
+                        <span className="text-[18px] font-medium text-gray-900  tracking-wide mb-1">{activeTab === 'groom' ? 'Thứ 5' : 'Thứ 3'}</span>
+                        <span className="text-[44px]  font-normal text-gray-955 leading-none tracking-tight">{activeTab === 'groom' ? '23' : '21'}</span>
                       </div>
                       <div className="w-[1px] h-12 bg-gray-400/80" />
                       <div className="flex-1 text-center pl-2">
-                        <span className="text-sm font-semibold text-gray-900 font-sans tracking-tight">Năm 2026</span>
+                        <span className="text-xl font-semibold text-gray-900  tracking-tight">2026</span>
                       </div>
                     </div>
 
@@ -520,7 +541,7 @@ export default function MainContent({ initialWishes }: { initialWishes: Wish[] }
               <motion.form variants={fadeInScale} ref={formRef} onSubmit={handleFormSubmit} className="bg-amber-200/40 p-5 rounded-2xl shadow-sm border border-amber-200/40 space-y-4 w-full">
                 <div>
                   <label className="block text-[12px] font-bold text-gray-700 uppercase mb-1">Tên của bạn là gì?</label>
-                  <input type="text" name="name" required className="w-full p-2.5 bg-[#faf8f5] border border-gray-100 rounded-xl text-xs focus:outline-none focus:border-[#6b0707]" />
+                  <input type="text" name="name" required className="w-full p-2.5 bg-[#faf8f5] border border-gray-100 rounded-xl text-base focus:outline-none focus:border-[#6b0707]" />
                 </div>
                 <div>
                   <label className="block text-[12px] font-bold text-gray-700 uppercase mb-1">Bạn là bạn của...</label>
@@ -535,7 +556,7 @@ export default function MainContent({ initialWishes }: { initialWishes: Wish[] }
                 </div>
                 <div>
                   <label className="block text-[12px] font-bold text-gray-700 uppercase mb-1">Gửi lời chúc</label>
-                  <textarea name="content" rows={3} required placeholder="Hãy viết lời chúc chân thành..." className="w-full resize-none p-2.5 bg-[#faf8f5] border border-gray-100 rounded-xl text-xs focus:outline-none focus:border-[#6b0707]" />
+                  <textarea name="content" rows={3} required placeholder="Hãy viết lời chúc chân thành..." className="w-full resize-none p-2.5 bg-[#faf8f5] border border-gray-100 rounded-xl text-base focus:outline-none focus:border-[#6b0707]" />
                 </div>
                 <button type="submit" className="w-full py-3 bg-[#6b0707] text-white font-bold text-xs uppercase tracking-widest rounded-xl shadow-md">GỬI LỜI CHÚC</button>
                 <button type="button" onClick={() => setOpenGiftModal(true)} className="w-full py-3 border-2 border-[#6b0707] text-[#6b0707] font-bold text-xs uppercase tracking-widest rounded-xl flex items-center justify-center gap-2 hover:bg-[#6b0707] hover:text-white transition">
@@ -545,14 +566,110 @@ export default function MainContent({ initialWishes }: { initialWishes: Wish[] }
                 {statusMessage && <p className="text-center text-[11px] text-[#6b0707] font-semibold bg-red-50 py-1.5 rounded-lg">{statusMessage}</p>}
               </motion.form>
 
-              <motion.div variants={fadeInUp} className="w-full mt-6 max-h-[200px] overflow-y-auto space-y-2.5 pr-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+              {/* NÚT BẤM ẨN KÍCH HOẠT QUYỀN TRẢ LỜI CỦA DÂU RỂ */}
+              <div className="w-full text-center mt-4 mb-2">
+                {!isAdmin ? (
+                  <button 
+                    type="button"
+                    onClick={() => {
+                      const password = prompt("Nhập mã bí mật của Dâu & Rể để phản hồi:");
+                      if (password === "2107") {
+                        setIsAdmin(true);
+                      } else if (password !== null) {
+                        alert("Mã xác thực không chính xác!");
+                      }
+                    }} 
+                    className="text-[13px] text-gray-300 hover:text-[#6b0707] transition font-mono"
+                  >
+                    [Chế độ Dâu Rể]
+                  </button>
+                ) : (
+                  <div className="flex items-center justify-center gap-2">
+                    <span className="text-xs text-emerald-600 font-bold">Đang bật chế độ Dâu Rể Phản Hồi</span>
+                    <button type="button" onClick={() => { setIsAdmin(false); setReplyingId(null); }} className="text-[13px] text-red-500 underline">Thoát</button>
+                  </div>
+                )}
+              </div>
+
+              {/* THỂ HIỆN DANH SÁCH LỜI CHÚC CÓ TÍNH NĂNG COMMENT + THẢ TIM */}
+              <motion.div variants={fadeInUp} className="w-full mt-2 max-h-[250px] overflow-y-auto space-y-2.5 pr-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                 {wishes.map((w) => (
-                  <div key={w.id} className="bg-white p-3.5 rounded-xl border border-gray-100">
-                    <div className="flex justify-between items-center mb-1 text-[16px]">
-                      <span className="font-bold text-gray-800">{w.name}</span>
-                      <span className="px-2 py-0.5 rounded-full bg-red-50 text-[#be123c] text-[13px] font-bold">{w.relationship}</span>
+                  <div key={w.id} className="bg-white p-3.5 rounded-xl border border-gray-100 flex flex-col gap-2 shadow-sm">
+                    <div className="flex justify-between items-start gap-2 w-full">
+                      <div className="flex-1">
+                        <div className="flex justify-between items-center mb-1 text-base">
+                          <span className="font-bold text-gray-800">{w.name}</span>
+                          <span className="px-2 py-0.5 rounded-full bg-red-50 text-[#be123c] text-[13px] font-bold">{w.relationship}</span>
+                        </div>
+                        <p className="text-gray-500 italic text-base">"{w.content}"</p>
+                        
+                        {/* Hiển thị cmt phản hồi từ DB MySQL */}
+                        {w.comment && (
+                          <div className="text-base mt-2 pl-2.5 border-l-2 border-[#6b0707] bg-amber-50/40 p-2 rounded-r-lg">
+                            <span className="font-bold text-[#6b0707] block text-xs uppercase tracking-wider mb-0.5">Dâu & Rể phản hồi:</span>
+                            <p className="text-gray-700 italic">"{w.comment}"</p>
+                          </div>
+                        )}
+                      </div>
+                      
+                      {/* Nút thả tim tương tác cmt */}
+                      <button 
+                        onClick={() => handleLikeWish(w.id)} 
+                        className="flex flex-col items-center justify-center self-center bg-rose-50 hover:bg-rose-100 active:scale-90 transition p-1.5 rounded-lg text-[#be123c]"
+                      >
+                        <svg width="16" height="16" fill={(w.likes && w.likes > 0) ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                        {w.likes && w.likes > 0 ? (
+                          <span className="text-[10px] font-bold mt-0.5">{w.likes}</span>
+                        ) : null}
+                      </button>
                     </div>
-                    <p className="text-gray-500 italic text-[16px]">"{w.content}"</p>
+
+                    {/* Form phản hồi dành riêng cho Admin dâu rể */}
+                    {isAdmin && (
+                      <div className="pt-1 border-t border-dashed border-gray-100 text-right w-full">
+                        {replyingId === w.id ? (
+                          <div className="flex flex-col gap-2 mt-1">
+                            <textarea 
+                              value={replyText}
+                              onChange={(e) => setReplyText(e.target.value)}
+                              placeholder="Nhập lời cảm ơn gửi tới khách..." 
+                              className="w-full p-2.5 bg-[#faf8f5] border border-gray-200 rounded-xl text-base focus:outline-none focus:border-[#6b0707] resize-none"
+                              rows={2}
+                            />
+                            <div className="flex justify-end gap-2">
+                              <button type="button" onClick={() => { setReplyingId(null); setReplyText(""); }} className="px-3 py-1.5 text-xs bg-gray-100 text-gray-600 font-bold rounded-lg">Hủy</button>
+                              <button 
+                                type="button"
+                                onClick={async () => {
+                                  if (!replyText.trim()) return;
+                                  const res = await replyWish(w.id, replyText, "2107"); 
+                                  if (res.success) {
+                                    setWishes(prev => prev.map(item => item.id === w.id ? { ...item, comment: replyText } : item));
+                                    setReplyingId(null);
+                                    setReplyText("");
+                                  } else {
+                                    alert(res.error || "Gặp lỗi khi lưu phản hồi.");
+                                  }
+                                }} 
+                                className="px-3 py-1.5 text-xs bg-[#6b0707] text-white font-bold rounded-lg shadow-sm"
+                              >
+                                Lưu bình luận
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <button 
+                            type="button"
+                            onClick={() => { setReplyingId(w.id); setReplyText(w.comment || ""); }} 
+                            className="text-[13px] font-bold text-[#6b0707] hover:underline"
+                          >
+                            {w.comment ? "Sửa phản hồi" : "Phản hồi lời chúc"}
+                          </button>
+                        )}
+                      </div>
+                    )}
                   </div>
                 ))}
               </motion.div>
@@ -660,6 +777,74 @@ export default function MainContent({ initialWishes }: { initialWishes: Wish[] }
           </div>
 
           <Lightbox open={lightboxIndex >= 0} index={lightboxIndex} close={() => setLightboxIndex(-1)} slides={lightboxSlides} />
+
+          {/* ================= MODAL QUÀ CƯỚI (GIFT MODAL) ================= */}
+          <AnimatePresence>
+            {openGiftModal && (
+              <motion.div 
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }} 
+                exit={{ opacity: 0 }} 
+                className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+                onClick={() => setOpenGiftModal(false)}
+              >
+                <motion.div 
+                  initial={{ scale: 0.95, y: 20 }} 
+                  animate={{ scale: 1, y: 0 }} 
+                  exit={{ scale: 0.95, y: 20 }}
+                  className="bg-white rounded-3xl p-6 w-full max-w-[400px] shadow-2xl border border-amber-100 flex flex-col items-center text-center relative"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <button 
+                    onClick={() => setOpenGiftModal(false)}
+                    className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition p-1"
+                  >
+                    <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+
+                  <h3 className="text-2xl text-[#6b0707] font-bold mb-4" style={{ fontFamily: 'var(--font-serif-title), serif' }}>Gửi Quà Cưới</h3>
+                  
+                  {/* Tabs phân biệt dâu rể */}
+                  <div className="flex bg-gray-100 p-1 rounded-full w-full mb-5">
+                    <button 
+                      onClick={() => setGiftTab("groom")} 
+                      className={`flex-1 py-2 text-[11px] font-bold uppercase tracking-wider rounded-full transition-all ${giftTab === "groom" ? "bg-[#6b0707] text-white" : "text-gray-500"}`}
+                    >
+                      Mừng Chú Rể
+                    </button>
+                    <button 
+                      onClick={() => setGiftTab("bride")} 
+                      className={`flex-1 py-2 text-[11px] font-bold uppercase tracking-wider rounded-full transition-all ${giftTab === "bride" ? "bg-[#6b0707] text-white" : "text-gray-500"}`}
+                    >
+                      Mừng Cô Dâu
+                    </button>
+                  </div>
+
+                  {/* Chi tiết STK + Mã QR tương ứng */}
+                  <div className="w-full flex flex-col items-center space-y-3 bg-[#faf8f5] p-4 rounded-2xl border border-amber-100/60">
+                    <div className="relative w-48 h-48 bg-white border border-gray-200 rounded-xl p-2 shadow-inner">
+                      <Image 
+                        src={bankInfo[giftTab].qr} 
+                        alt={`Mã QR ${giftTab === "groom" ? "Chú Rể" : "Cô Dâu"}`} 
+                        fill 
+                        className="object-contain p-2"
+                      />
+                    </div>
+                    <div className="text-gray-800 text-sm space-y-1">
+                      <p className="font-bold text-[#6b0707] text-base">{bankInfo[giftTab].name}</p>
+                      <p className="font-medium"><span className="text-gray-400">Ngân hàng:</span> {bankInfo[giftTab].bank}</p>
+                      <p className="font-mono font-bold bg-white px-3 py-1 rounded-lg inline-block border border-gray-100 select-all tracking-wide text-base">
+                        {bankInfo[giftTab].number}
+                      </p>
+                    </div>
+                  </div>
+                  <p className="text-[11px] text-gray-400 italic mt-4">Nhấp đúp hoặc đè vào số tài khoản để sao chép nhanh</p>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* RENDERING STARS */}
           {stars.map((star) => (
