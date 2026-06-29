@@ -355,7 +355,7 @@ export default function MainContent({  initialWishes, type = "guest", }:  MainCo
 
       <audio ref={audioRef} src="/Beautiful In White.mp3" loop preload="auto" />
 
-      {!isOpened && <Envelope isOpen={isOpened} onOpen={handleOpenInvitation} />}
+      {!isOpened && <Envelope isOpen={isOpened} onOpen={handleOpenInvitation} type={type} />}
 
       {isOpened && (
         <motion.div
