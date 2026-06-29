@@ -98,7 +98,7 @@ export default function MainContent({  initialWishes, type = "guest", }:  MainCo
       dateText: '01 . 08',
       yearText: '2026',
       lunarText: '(Tức Ngày 19 Tháng 06 Năm Bính Ngọ)',
-      img: "/anh-a;bum11.jpg",
+      img: "/anh_album13.jpg",
       // Cấu hình lịch tháng 7/2026 làm nổi bật ngày 26
       
       weddingDayNumber: 1,
