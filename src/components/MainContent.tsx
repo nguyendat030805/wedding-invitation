@@ -184,15 +184,15 @@ export default function MainContent({  initialWishes, type = "guest", }:  MainCo
   }, [initialWishes]);
   
   const imagesGrid = [
-    { src: '/anh_cong_1.jpg' }, 
+    { src: '/anh-a;bum11.jpg' }, 
     { src: '/anh_album6.jpg' }, 
     { src: '/anh_ngang.jpg' }, 
     { src: '/anh_album8.jpg' }, 
     { src: '/anh_album2.jpg' }, 
     { src: '/anh_ngang4.jpg' }, 
     { src: '/anh_album4.jpg' }, 
-    { src: '/anh_album5.jpg' },
-    { src: '/anh_cong2.jpg' },
+    { src: '/album12.jpg' },
+    { src: '/anh-bia4.jpg' },
     { src: '/anh_album7.jpg' },
     { src: '/anh_album3.jpg' },
     { src: '/anh_album10.jpg' },
