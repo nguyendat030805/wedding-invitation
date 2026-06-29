@@ -11,22 +11,25 @@ interface EnvelopeProps {
   type?: "bride" | "groom" | "guest"; // Thêm prop type để nhận diện trang
 }
 
-export default function Envelope({ isOpen, onOpen, type = "guest" }: EnvelopeProps) {
+export default function Envelope({ isOpen, onOpen, type = "bride" }: EnvelopeProps) {
   const [doorOpen, setDoorOpen] = useState(false);
 
   // Cấu hình ngày giờ hiển thị trên bìa tương ứng với từng thiệp
   const dateConfig = {
     groom: {
       timeText: "Thứ 5 - 11:00",
-      dateText: "23.07.2026"
+      dateText: "23.07.2026",
+      img: "/anh-a;bum11.jpg"
     },
     bride: {
       timeText: "Thứ 3 - 11:00",
-      dateText: "21.07.2026"
+      dateText: "21.07.2026",
+      img: "/anh_bia4.jpg"
     },
     guest: {
       timeText: "Chủ Nhật - 18:00",
-      dateText: "01.08.2026"
+      dateText: "01.08.2026",
+      img: "/anh-a;bum11.jpg"
     }
   };
 
@@ -59,7 +62,7 @@ export default function Envelope({ isOpen, onOpen, type = "guest" }: EnvelopePro
         {/* ================= 1. HÌNH ẢNH NỀN BÌA TOÀN CẢNH ================= */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="/anh_cong_1.jpg"
+            src={currentDate.img}
             alt="Wedding Background Cover"
             fill
             className="object-cover"

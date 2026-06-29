@@ -54,6 +54,7 @@ export default function MainContent({  initialWishes, type = "guest", }:  MainCo
       dateText: '23 . 07',
       yearText: '2026',
       lunarText: '(Tức Ngày 10 Tháng 06 Năm Bính Ngọ)',
+      img: "/anh-a;bum11.jpg",
       // Cấu hình lịch tháng 7/2026 làm nổi bật ngày 23
       weddingDayNumber: 23,
       calendarEmptySlots: 2,
@@ -70,6 +71,7 @@ export default function MainContent({  initialWishes, type = "guest", }:  MainCo
       borderColor: '#c5a059',     // Màu viền vàng champagne
       // Ngày giờ Lễ chính ở Section 1 & Countdown
       countdownDate: '2026-07-21T11:00:00',
+      img: "/anh-bia4.jpg",
       timeText: '11:00',
       dayOfWeek: 'Thứ 3',
       dateText: '21 . 07',
@@ -84,7 +86,7 @@ export default function MainContent({  initialWishes, type = "guest", }:  MainCo
     },
     guest: {
       defaultTab: 'groom' as 'groom' | 'bride',
-      title:"Trân Trọng Báo Tin Lễ Thành Hôn Của",
+      title:"Trân Trọng Báo Tin Lễ Báo Hỷ Của",
       // Hệ màu sắc riêng biệt cho Tiệc Sài Gòn
       themeColor: '#4c0519',      // Màu đỏ rượu vang Bordeaux
       textColor: '#9f1239',       // Màu đỏ thẫm tinh tế
@@ -96,12 +98,13 @@ export default function MainContent({  initialWishes, type = "guest", }:  MainCo
       dateText: '01 . 08',
       yearText: '2026',
       lunarText: '(Tức Ngày 19 Tháng 06 Năm Bính Ngọ)',
+      img: "/anh-a;bum11.jpg",
       // Cấu hình lịch tháng 7/2026 làm nổi bật ngày 26
       
       weddingDayNumber: 1,
       calendarEmptySlots: 5,
       // Link Google Calendar
-      calendarTitle: "Tiệc Mừng Thành Hôn: Văn Trung & Thu Huệ",
+      calendarTitle: "Tiệc Báo Hỷ: Văn Trung & Thu Huệ",
       calendarDates: "20260801T180000/20260801T210000",
     }
   };
@@ -131,7 +134,7 @@ export default function MainContent({  initialWishes, type = "guest", }:  MainCo
       calendarTitle: "Tháng 7 - 2026"
     },
     guest: {
-      mainTitle:"THAM DỰ TIỆC MỪNG LỄ THÀNH HÔN",
+      mainTitle:"THAM DỰ TIỆC MỪNG LỄ BÁO HỶ",
       title: "NHÀ HÀNG KIM CƯƠNG PLAZA",
       address: "Số 188 đại lộ Bình Dương - Phường Thuận Giao - Thành Phố Hồ Chí Minh",
       map: "https://www.google.com/maps/place/Diamond+Wedding+Restaurant/@10.9514838,106.7027957,864m/data=!3m2!1e3!4b1!4m6!3m5!1s0x3174d7460bae5f9d:0xbdac6ef286624c6f!8m2!3d10.9514838!4d106.7053706!16s%2Fg%2F11b6pfnm_9?entry=ttu&g_ep=EgoyMDI2MDYyNC4wIKXMDSoASAFQAw%3D%3D",
@@ -416,7 +419,7 @@ export default function MainContent({  initialWishes, type = "guest", }:  MainCo
                     <p className="text-[13px] font-['UTM_Bikham'] font-bold tracking-wider mb-1" style={{ color: currentConfig.textColor }}>Nhà Gái</p>
                     <p className="font-medium font-['UTM_Bikham'] text-gray-700">Ông: <span className="font-bold font-['UTM_Bikham'] text-gray-950">TRẦN QUANG HIỂN</span></p>
                     <p className="font-medium font-['UTM_Bikham'] text-gray-700">Bà: <span className="font-bold font-['UTM_Bikham'] text-gray-950">DƯƠNG THỊ LÊ</span></p>
-                    <p className="text-[11px] text-gray-500 font-['UTM_Bikham'] leading-relaxed mt-2 pt-2 border-t border-rose-100">Thôn Tân Bằng - Xã Tân Mỹ<br />Tỉnh Quảng Trị</p>
+                    <p className="text-[11px] text-gray-500 font-['UTM_Bikham'] leading-relaxed mt-2 pt-2 border-t border-rose-100">Thôn Tân Bằng - Xã Tân Mỹ<br />Tỉnh Quảng Trị (Quảng Bình cũ)</p>
                 </div>
               </motion.div>
 
@@ -456,7 +459,7 @@ export default function MainContent({  initialWishes, type = "guest", }:  MainCo
                   <Image src="/đèn lồng.png" alt="Đèn lồng góc phải" fill className="object-contain object-top" />
                 </div>
                 <div className="relative w-full h-full z-10">
-                  <Image src="/anh_cong_1.jpg" fill className="object-cover" alt="Ảnh đại diện chính" priority />
+                  <Image src={currentConfig.img} fill className="object-cover" alt="Ảnh đại diện chính" priority />
                 </div>
               </motion.div>
             </motion.section>
@@ -696,7 +699,7 @@ export default function MainContent({  initialWishes, type = "guest", }:  MainCo
                   </button>
                 ) : (
                   <div className="flex items-center justify-center gap-2">
-                    <span className="text-xs text-emerald-600 font-bold">Đang bật chế độ Dâu Rể Phản Hồi</span>
+                    <span className="text-xs text-emerald-600 font-bold">Đang Phản Hồi Những Lời Chúc Đầy Ý Nghĩa</span>
                     <button type="button" onClick={() => { setIsAdmin(false); }} className="text-[13px] text-red-500 underline">Thoát</button>
                   </div>
                 )}
@@ -711,12 +714,12 @@ export default function MainContent({  initialWishes, type = "guest", }:  MainCo
                           <span className="font-bold text-gray-800">{w.name}</span>
                           <span className="px-2 py-0.5 rounded-full bg-red-50 text-[13px] font-bold" style={{ color: currentConfig.textColor }}>{w.relationship}</span>
                         </div>
-                        <p className="text-gray-500 italic text-base">"{w.content}"</p>
+                        <p className="text-gray-500  text-base">{w.content}</p>
                         
                         {w.comment && (
                           <div className="text-base mt-2 pl-2.5 bg-amber-50/40 p-2 rounded-r-lg" style={{ borderLeft: `2px solid ${currentConfig.themeColor}` }}>
                             <span className="block text-xs font-bold uppercase tracking-wider mb-0.5" style={{ color: currentConfig.themeColor }}>Dâu & Rể phản hồi:</span>
-                            <p className="text-gray-700 italic">"{w.comment}"</p>
+                            <p className="text-gray-700">{w.comment}</p>
                           </div>
                         )}
                       </div>
