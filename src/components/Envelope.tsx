@@ -8,10 +8,29 @@ import HeartRain from './HeartRain';
 interface EnvelopeProps {
   isOpen: boolean;
   onOpen: () => void;
+  type?: "bride" | "groom" | "guest"; // Thêm prop type để nhận diện trang
 }
 
-export default function Envelope({ isOpen, onOpen }: EnvelopeProps) {
+export default function Envelope({ isOpen, onOpen, type = "guest" }: EnvelopeProps) {
   const [doorOpen, setDoorOpen] = useState(false);
+
+  // Cấu hình ngày giờ hiển thị trên bìa tương ứng với từng thiệp
+  const dateConfig = {
+    groom: {
+      timeText: "Thứ 5 - 11:00",
+      dateText: "23.07.2026"
+    },
+    bride: {
+      timeText: "Thứ 3 - 11:00",
+      dateText: "21.07.2026"
+    },
+    guest: {
+      timeText: "Chủ Nhật - 18:00",
+      dateText: "01.08.2026"
+    }
+  };
+
+  const currentDate = dateConfig[type];
 
   const handleOpenClick = () => {
     if (doorOpen) return;
@@ -75,10 +94,10 @@ export default function Envelope({ isOpen, onOpen }: EnvelopeProps) {
               
               <div className="text-center z-10 font-['UTM_Bikham'] ">
                 <p className="text-amber-200 font-semibold text-xs sm:text-sm tracking-[0.2em] uppercase drop-shadow">
-                  Thứ 3 - 11:00
+                  {currentDate.timeText}
                 </p>
                 <p className="text-3xl sm:text-4xl font-bold text-white tracking-wider mt-1.5 drop-shadow-md">
-                  21.07.2026
+                  {currentDate.dateText}
                 </p>
               </div>
 
