@@ -119,7 +119,7 @@ export default function MainContent({  initialWishes, type = "guest", }:  MainCo
       address: "Xóm Vụng Chùa - Xã Thiên Nhẫn - Tỉnh Nghệ An",
       map: "https://www.google.com/maps/place/H%C4%90ND-UBND+X%C3%A3+Thi%C3%AAn+Nh%E1%BA%ABn/@18.5987911,105.5137451,13351m/data=!3m1!1e3!4m10!1m2!2m1!1zWMOzbSBW4bulbmcgQ2jDuWEgLSBYw6MgVGhpw6puIE5o4bqrbiAtIFThu4luaCBOZ2jhu4cgQW4!3m6!1s0x3139c70005138d93:0xa1eca8f07476b32d!8m2!3d18.6069922!4d105.5789449!15sCjhYw7NtIFbhu6VuZyBDaMO5YSAtIFjDoyBUaGnDqm4gTmjhuqtuIC0gVOG7iW5oIE5naOG7hyBBblo2IjR4w7NtIHbhu6VuZyBjaMO5YSB4w6MgdGhpw6puIG5o4bqrbiB04buJbmggbmdo4buHIGFukgERZ292ZXJubWVudF9vZmZpY2WaAURDaTlEUVVsUlFVTnZaRU5vZEhsalJqbHZUMjVHZWxkWWNGZFNSM015VDBkT1FscEhWbnBoU0ZaU1ZYa3hjR0p0WXhBQuABAPoBBAgAEEk!16s%2Fg%2F11xl43kxkx?entry=ttu&g_ep=EgoyMDI2MDYyNC4wIKXMDSoASAFQAw%3D%3D",
       dayOfWeekMini: "Thứ 5",
-      dateNumberMini: "23",
+      dateNumberMini: "23 . 07",
       lunarMini: "(Tức Ngày 10 Tháng 06 Năm Bính Ngọ)",
       calendarTitle: "Tháng 7 - 2026"
     },
@@ -129,7 +129,7 @@ export default function MainContent({  initialWishes, type = "guest", }:  MainCo
       address: "Thôn Tân Bằng, xã Tân Mỹ, tỉnh Quảng Trị",
       map: "https://www.google.com/maps/place/T%C3%A2n+B%E1%BA%B1ng,+T%C3%A2n+L%E1%BA%A1c,+T%C3%A2n+Th%E1%BB%A7y,+T%C3%A2n+M%E1%BB%B9,+Qu%E1%BA%A3ng+Tr%E1%BB%8B,+Vietnam/@17.198652,106.8465224,187m/data=!3m1!1e3!4m6!3m5!1s0x3140b6eeeb091f39:0x74d707f6d97589b6!8m2!3d17.1981624!4d106.8483871!16s%2Fg%2F11rqtp6v1m?entry=ttu&g_ep=EgoyMDI2MDYyNC4wIKXMDSoASAFQAw%3D%3D",
       dayOfWeekMini: "Thứ 3",
-      dateNumberMini: "21",
+      dateNumberMini: "21 . 07",
       lunarMini: "(Tức Ngày 08 Tháng 06 Năm Bính Ngọ)",
       calendarTitle: "Tháng 7 - 2026"
     },
@@ -139,7 +139,7 @@ export default function MainContent({  initialWishes, type = "guest", }:  MainCo
       address: "Số 188 đại lộ Bình Dương - Phường Thuận Giao - Thành Phố Hồ Chí Minh",
       map: "https://www.google.com/maps/place/Diamond+Wedding+Restaurant/@10.9514838,106.7027957,864m/data=!3m2!1e3!4b1!4m6!3m5!1s0x3174d7460bae5f9d:0xbdac6ef286624c6f!8m2!3d10.9514838!4d106.7053706!16s%2Fg%2F11b6pfnm_9?entry=ttu&g_ep=EgoyMDI2MDYyNC4wIKXMDSoASAFQAw%3D%3D",
       dayOfWeekMini: "Thứ 7",
-      dateNumberMini: "01",
+      dateNumberMini: "01 . 08",
       lunarMini: "(Tức Ngày 19 Tháng 06 Năm Bính Ngọ)",
       calendarTitle: "Tháng 8 - 2026"
     },
@@ -577,7 +577,7 @@ export default function MainContent({  initialWishes, type = "guest", }:  MainCo
                     <div className="w-[1px] h-12 bg-gray-400/80" />
                     <div className="flex-1 flex flex-col items-center justify-center px-4 min-w-[100px]">
                       <span className="text-[18px] font-medium text-gray-900 tracking-wide mb-1">{location.dayOfWeekMini}</span>
-                      <span className="text-[44px] font-normal text-gray-955 leading-none tracking-tight">{location.dateNumberMini}</span>
+                      <span className="text-[30px] font-normal text-gray-955 leading-none tracking-tight">{location.dateNumberMini}</span>
                     </div>
                     <div className="w-[1px] h-12 bg-gray-400/80" />
                     <div className="flex-1 text-center pl-2">
