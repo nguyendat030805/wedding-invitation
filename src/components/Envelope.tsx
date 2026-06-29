@@ -8,13 +8,13 @@ import HeartRain from './HeartRain';
 interface EnvelopeProps {
   isOpen: boolean;
   onOpen: () => void;
-  type?: "bride" | "groom" | "guest"; // Thêm prop type để nhận diện trang
+  type?: "bride" | "groom" | "guest"; // Thuộc tính nhận diện trang từ URL truyền xuống
 }
 
 export default function Envelope({ isOpen, onOpen, type = "guest" }: EnvelopeProps) {
   const [doorOpen, setDoorOpen] = useState(false);
 
-  // Cấu hình ngày giờ hiển thị trên bìa tương ứng với từng thiệp
+  // Cấu hình ngày giờ hiển thị trên bìa tương ứng chính xác với từng thiệp
   const dateConfig = {
     groom: {
       timeText: "Thứ 5 - 11:00",
@@ -30,7 +30,16 @@ export default function Envelope({ isOpen, onOpen, type = "guest" }: EnvelopePro
     }
   };
 
-  const currentDate = dateConfig[type];
+  // Logic dự phòng (Fallback) đọc trực tiếp URL ở phía Client nếu cơ chế tối ưu tĩnh (SSG) của Next.js ép cứng dữ liệu khi deploy
+  let activeType = type;
+  if (typeof window !== 'undefined') {
+    const path = window.location.pathname.toLowerCase();
+    if (path.includes('nhatrai')) activeType = 'groom';
+    else if (path.includes('nhagai')) activeType = 'bride';
+    else if (path.includes('sgon')) activeType = 'guest';
+  }
+
+  const currentDate = dateConfig[activeType] || dateConfig["guest"];
 
   const handleOpenClick = () => {
     if (doorOpen) return;
