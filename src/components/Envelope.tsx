@@ -27,7 +27,7 @@ export default function Envelope({ isOpen, onOpen, type = "bride" }: EnvelopePro
       img: "/anh-bia4.jpg"
     },
     guest: {
-      timeText: "Chủ Nhật - 18:00",
+      timeText: "Thứ 7 - 18:00",
       dateText: "01.08.2026",
       img: "/anh-a;bum11.jpg"
     }
